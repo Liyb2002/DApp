@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+        <script src="https://cdn.jsdelivr.net/npm/fortmatic@latest/dist/fortmatic.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/web3@0.20.7/dist/web3.min.js"></script>
+        <script src="https://github.com/vijayee/go-ethereum"></script>
+        <script type="text/javascript">
+        //import from https://github.com/vijayee/go-ethereum doesn't work...
+        //Look at this https://godoc.org/github.com/vijayee/go-ethereum/ethutil
+        const fm = new Fortmatic('pk_test_2C31D939A4D5EC5D');
+        web3 = new Web3(fm.getProvider());
+      // const ethUtil = require('ethereumjs-util');
+       
+
+      //Make sure web3 exist
+      if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+            console.log("Web3 exist");
+         //   console.log(web3.eth);
+        } else {
+        web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+
+        //Address to receive the 
+        const toAddress = '0xb159752065EA68Ef0B22249Df25864E624fec45D';
+        const sendValue = web3.toWei(1, 'ether'); // Convert 1 ether to wei
+  
+        // Get user account wallet address first
+        web3.eth.getAccounts((error, accounts) => {
+         if (error) throw error;
+  
+         // Construct Ether transaction params
+         const txnParams = {
+         from: accounts[0],
+             to: toAddress,
+             value: sendValue
+            }
+        // Send Ether transaction with web3
+        //transaction perfectly works
+        web3.eth.sendTransaction(txnParams, (error, txnHash) => {
+         if (error) throw error;
+            console.log(txnHash);
+            });
+
+        const from = accounts[0];
+       // const msg = ethUtil.bufferToHex(new Buffer('YOUR_MESSAGE', 'utf8'));
+       //ethUtil doesn't seem to work....I use a non crypted msg here...
+       const msg='hhh'
+        const params = [msg, from];
+        const method = 'personal_sign';
+ 
+        web3.currentProvider.sendAsync({
+        id: 1,
+    method,
+    params,
+    from,
+  }, function(error, result) {
+    if (error) throw error;
+    console.log(result);
+  });
+            });
+
+
+                
+    
+    </script>
+
+  <head>
+    <title>Hello World!</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- TODO: Step 1: Include Fortmatic SDK Script -->
+ 
+    <!-- End Step 1 -->
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Spare some change in test ether ❤️</h1>
+      <div class="divider"></div>
+      <h2>User sign</h2>
+      <input id="section-login" type="button" value="Confirm" onclick="handleLogin()"/>
+    </div>
+  </body>
+
+</html>
